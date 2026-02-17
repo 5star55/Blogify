@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { Suspense, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
@@ -14,7 +14,7 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
-export default function Page() {
+function UserAuthContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -293,5 +293,13 @@ export default function Page() {
         </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className='w-full px-4 mt-10' />}>
+      <UserAuthContent />
+    </Suspense>
   )
 }
