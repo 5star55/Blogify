@@ -1,6 +1,6 @@
 import React from "react"
 import { Input } from "@/components/ui/input"
-import { posts, users } from "@/lib/blog-data"
+import { getPosts } from "@/lib/blog-data"
 import Engagement from '@/components/Engagement'
 import Image from "next/image"
 import {
@@ -16,8 +16,8 @@ import Link from 'next/link'
 import type {Post} from '@/lib/blog-data'
 
 
-export default function Userposts({post}:{post:Post}) {
-
+export default async function Userposts({post}:{post:Post}) {
+const posts= await getPosts()
 
 return (
             <Card key={post.id} className="bg-slate-800 text-white mb-10">
@@ -32,8 +32,8 @@ return (
               </CardHeader>
               <CardContent className="flex flex-col gap-10 text-md md:text-2xl md:flex-row">
                 <Link href={`/post/${post.id}`} className="block">
-                  {post.image && <Image
-                    src={post?.image}
+                  {post.authorImage && <Image
+                    src={post?.authorImage}
                     alt={post.title}
                     width={1200}
                     height={30}
@@ -41,9 +41,9 @@ return (
                   />}
                 </Link>
                 <Link href={`/post/${post.id}`} className="block">
-                <p>{post.body}</p></Link>
+                <p>{post.content}</p></Link>
               </CardContent>
-              <Engagement post={post} toggleClick={false}/>
+              <Engagement post={post}/>
               <CardFooter>
                 <Link href={`/post/${post.id}`} className="text-sm text-sky-300 hover:underline">
                   Read full post
