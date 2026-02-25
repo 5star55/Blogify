@@ -75,14 +75,17 @@ function UserAuthContent() {
         credentials: 'include', // needed if API uses cookies for session
       })
 
-      let data: any = {}
-      try {
-        data = await response.json()
-      } catch {}
+      
+      const data = await response.json()
 
       if (!response.ok) {
         setErrorMessage(data?.message || data?.error || 'Login failed. Check your credentials.')
         return
+      }
+
+      const token = data.token
+      if (token && typeof window !== 'undefined') {
+        localStorage.setItem('token', token)
       }
 
       setSuccessMessage('Logged in successfully.')
@@ -127,6 +130,11 @@ function UserAuthContent() {
       if (!response.ok) {
         setErrorMessage(data?.message || data?.error || 'Sign-up failed. Try a different email.')
         return
+      }
+
+      const token = data?.token ?? data?.data?.token ?? data?.accessToken ?? data?.data?.accessToken
+      if (token && typeof window !== 'undefined') {
+        localStorage.setItem('token', token)
       }
 
       setSuccessMessage('Account created successfully.')
